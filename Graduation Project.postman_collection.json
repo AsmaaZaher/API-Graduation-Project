@@ -1,0 +1,1591 @@
+{
+	"info": {
+		"_postman_id": "efea4770-1018-4696-82ad-54bee34f63e2",
+		"name": "Graduation Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36157204"
+	},
+	"item": [
+		{
+			"name": "Board",
+			"item": [
+				{
+					"name": "Create Board",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var boardName = \"orange\";\r",
+									"pm.environment.set(\"BoardName\", boardName);\r",
+									"pm.environment.set(\"BoardDesc\", \"This board color is \" + boardName);\r",
+									"pm.environment.set(\"prefs_background\", \"orange\")\r",
+									"console.log(\"prefs_background: \" + pm.environment.get(\"prefs_background\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"boardID\", res.id);\r",
+									"}\r",
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"BoardName\", res.name);\r",
+									"}\r",
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"BoardDesc\", res.desc) ;\r",
+									"}\r",
+									"{\r",
+									"    let res = pm.response.json()\r",
+									"     pm.environment.set(\"prefs_background\", res.color) ;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Verify that BoardName is correct\", function () {\r",
+									"    pm.expect(response.name).to.eql(pm.environment.get(\"BoardName\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"verify that BoardDesc is correct\", function () {\r",
+									"    pm.expect(response.desc).to.eql(pm.environment.get(\"BoardDesc\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Closed attribute is false\", function () {\r",
+									"    pm.expect(response.closed).to.be.false;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Pinned attribute is false\", function () {\r",
+									"    pm.expect(response.pinned).to.be.false;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify that prefs_background is correct\", function () {\r",
+									"    pm.expect(response.background).to.eql(pm.environment.get(\"orange\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.trello.com/1/boards/?key={{My Key}}&token={{My Token}}&name={{BoardName}}&desc={{BoardDesc}}&prefs_background=orange",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{BoardName}}"
+								},
+								{
+									"key": "desc",
+									"value": "{{BoardDesc}}"
+								},
+								{
+									"key": "prefs_background",
+									"value": "orange"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"newBoardName\", res.name);\r",
+									"}\r",
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"BoardDesc\", res.desc) ;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);\r",
+									"});\r",
+									"pm.test(\"Board name is correct\", function () {\r",
+									"    pm.expect(response.name).to.eql(pm.environment.get(\"boardName\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Board desc is correct\", function () {\r",
+									"    pm.expect(response.desc).to.eql(\"Board name was orange and updated to \" + pm.environment.get(\"boardName\")); \r",
+									"});\r",
+									"pm.test(\"Closed attribute is false\", function () {\r",
+									"    var responseJson = pm.response.json(); \r",
+									"    pm.expect(responseJson.closed).to.be.false;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Pinned attribute is false\", function () {\r",
+									"    var responseJson = pm.response.json(); \r",
+									"    pm.expect(responseJson.pinned).to.be.false;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randNum = Math.floor(Math.random()*100)+1;\r",
+									"\r",
+									"pm.environment.set(\"newBoardName\", \"Name\" +randNum);\r",
+									"\r",
+									"pm.environment.set(\"BoardDesc\", \"Board name was orange and updated to \" +pm.environment.get \r",
+									"    (\"newBoardName\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.trello.com/1/boards/{{boardID}}?key={{My Key}}&token={{My Token}}&name={{newBoardName}}&desc={{BoardDesc}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"boards",
+								"{{boardID}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{newBoardName}}"
+								},
+								{
+									"key": "desc",
+									"value": "{{BoardDesc}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);\r",
+									"});\r",
+									"pm.test(\"Board name is correct\", function () {\r",
+									"    pm.expect(response.name).to.eql(pm.environment.get(\"boardName\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Board desc is correct\", function () {\r",
+									"    pm.expect(response.desc).to.eql(\"Board name was orange and updated to \" + pm.environment.get(\"boardName\")); \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/boards/{{boardID}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"boards",
+								"{{boardID}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "List",
+			"item": [
+				{
+					"name": "Create list1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"listOneiD\", res.id);\r",
+									"}\r",
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"ListName\", res.name);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Verify that List name is ListOne\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"ListOne\");\r",
+									"});\r",
+									"pm.test(\"Closed attribute is false\", function () {\r",
+									"    var responseJson = pm.response.json(); \r",
+									"    pm.expect(responseJson.closed).to.be.false;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.trello.com/1/boards/{{boardID}}/lists?name=ListOne&key={{My Key}}&token={{My Token}}&listoneiD={{listOneiD}}&ListName={{ListName}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"boards",
+								"{{boardID}}",
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ListOne"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "listoneiD",
+									"value": "{{listOneiD}}"
+								},
+								{
+									"key": "ListName",
+									"value": "{{ListName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creatlist2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"listtwoiD\", res.id);\r",
+									"\r",
+									"{\r",
+									"    let res = pm.response.json();\r",
+									"\r",
+									"    pm.environment.set(\"ListYwoName\", res.name);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Verify that List name is ListTwo\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"ListTwo\");\r",
+									"});\r",
+									"pm.test(\"Closed attribute is false\", function () {\r",
+									"    var responseJson = pm.response.json(); \r",
+									"    pm.expect(responseJson.closed).to.be.false;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://api.trello.com/1/boards/{{boardID}}/lists?name=ListOne&key={{My Key}}&token={{My Token}}&listoneiD={{listtwoiD}}&ListName={{ListTwoName}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"boards",
+								"{{boardID}}",
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ListOne"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "listoneiD",
+									"value": "{{listtwoiD}}"
+								},
+								{
+									"key": "ListName",
+									"value": "{{ListTwoName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update list1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Verify that BoardName is correct\", function () {\r",
+									"    var responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"BoardName\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://api.trello.com/1/lists/{{listOneiD}}?pos=bottom&key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"lists",
+								"{{listOneiD}}"
+							],
+							"query": [
+								{
+									"key": "pos",
+									"value": "bottom"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update list2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"List is archived\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.closed).to.be.true;\r",
+									"});\r",
+									"pm.test(\"Verify that BoardName is correct\", function () {\r",
+									"    var responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"BoardName\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://api.trello.com/1/lists/{{listtwoiD}}/closed?key={{My Key}}&token={{My Token}}&value=true",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"lists",
+								"{{listtwoiD}}",
+								"closed"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "value",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ListOne 'id' is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const listId = pm.environment.get(\"listId\");\r",
+									"    pm.expect(response.id).to.eql(listId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ListOne Position is bottom\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.pos).to.eql(\"bottom\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.trello.com/1/lists/{{listOneiD}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"lists",
+								"{{listOneiD}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ListOne ID is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.id).to.eql(pm.environment.get(\"listId\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"ListTwo is archived\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"     pm.expect(res.json().closed).to.be.true;\r",
+									"    });\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.trello.com/1/lists/{{listtwoiD}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"lists",
+								"{{listtwoiD}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Card",
+			"item": [
+				{
+					"name": "Create card",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randNum = Math.floor(Math.random()*100)+1;\r",
+									"let cardName = \"Testcase\" + randNum;\r",
+									"pm.environment.set(\"CardName\",\"Testcase\" +randNum);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"CardiD\", response.id);\r",
+									"pm.environment.set(\"CardName\", response.name);\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Card name is correct\", function () {\r",
+									"    pm.expect(response.name).to.eql(pm.environment.get(\"CardName\"));\r",
+									"    pm.environment.set(\"cardId\", response.id);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards?idList={{listOneiD}}&key={{My Key}}&token={{My Token}}&cardiD={{CardiD}}&cardname={{CardName}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listOneiD}}"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "cardiD",
+									"value": "{{CardiD}}"
+								},
+								{
+									"key": "cardname",
+									"value": "{{CardName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add comment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = pm.environment.get(\"CardName\");\r",
+									" \r",
+									"let commentText = `This card name is {Testcase} & it was created on {ListOne}`;\r",
+									"pm.environment.set(\"commentText\", commentText);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"text\", pm.response.text());\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comment is added correctly\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"The requested resource was not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards/{{CardiD}}/actions/comments?text={{commentText}}&key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{CardiD}}",
+								"actions",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "{{commentText}}"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Verify that CardID is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.id).to.eql(pm.environment.get(\"CardID\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards/{{CardiD}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{CardiD}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create card two",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randNum = Math.floor(Math.random()*100)+1;\r",
+									"let cardName = \"Testcase\" + randNum;\r",
+									"pm.environment.set(\"CardName\",\"Testcase\" +randNum);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"CardiD\", response.id);\r",
+									"pm.environment.set(\"CardName\", response.name);\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Card name is correct\", function () {\r",
+									"    pm.expect(response.name).to.eql(pm.environment.get(\"CardName\"));\r",
+									"    pm.environment.set(\"cardId\", response.id);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards?idList={{listOneiD}}&key={{My Key}}&token={{My Token}}&cardiD={{CardiD}}&cardname={{CardName}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listOneiD}}"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "cardiD",
+									"value": "{{CardiD}}"
+								},
+								{
+									"key": "cardname",
+									"value": "{{CardName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add comment Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = pm.environment.get(\"CardName\");\r",
+									" \r",
+									"let commentText = `This card name is {Testcase} & it was created on {ListOne}`;\r",
+									"pm.environment.set(\"commentText\", commentText);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"text\", pm.response.text());\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comment is added correctly\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"The requested resource was not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards/{{CardiD}}/actions/comments?text={{commentText}}&key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{CardiD}}",
+								"actions",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "{{commentText}}"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Card Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Verify that CardID is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.id).to.eql(pm.environment.get(\"CardID\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards/{{CardiD}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{CardiD}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create card three",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randNum = Math.floor(Math.random()*100)+1;\r",
+									"let cardName = \"Testcase\" + randNum;\r",
+									"pm.environment.set(\"CardName\",\"Testcase\" +randNum);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"CardiD\", response.id);\r",
+									"pm.environment.set(\"CardName\", response.name);\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Card name is correct\", function () {\r",
+									"    pm.expect(response.name).to.eql(pm.environment.get(\"CardName\"));\r",
+									"    pm.environment.set(\"cardId\", response.id);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards?idList={{listOneiD}}&key={{My Key}}&token={{My Token}}&cardiD={{CardiD}}&cardname={{CardName}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listOneiD}}"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								},
+								{
+									"key": "cardiD",
+									"value": "{{CardiD}}"
+								},
+								{
+									"key": "cardname",
+									"value": "{{CardName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add comment Copy 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = pm.environment.get(\"CardName\");\r",
+									" \r",
+									"let commentText = `This card name is {Testcase} & it was created on {ListOne}`;\r",
+									"pm.environment.set(\"commentText\", commentText);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"text\", pm.response.text());\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comment is added correctly\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"The requested resource was not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards/{{CardiD}}/actions/comments?text={{commentText}}&key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{CardiD}}",
+								"actions",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "{{commentText}}"
+								},
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Card Copy 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Verify that CardID is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.id).to.eql(pm.environment.get(\"CardID\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/cards/{{CardiD}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{CardiD}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get all cards details in ListOne",
+			"item": [
+				{
+					"name": "Get all cards details in ListOne",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.trello.com/1/lists/{{listOneiD}}/cards?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"lists",
+								"{{listOneiD}}",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Board",
+			"item": [
+				{
+					"name": "Delete Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://api.trello.com/1/boards/{{boardID}}?key={{My Key}}&token={{My Token}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"trello",
+								"com"
+							],
+							"path": [
+								"1",
+								"boards",
+								"{{boardID}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{My Key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{My Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
